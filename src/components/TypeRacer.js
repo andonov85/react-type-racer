@@ -16,10 +16,10 @@ function getRandomWords(count) {
 }
 
 function TypeRacer() {
-    const initialText = useRef(getRandomWords(100));
+    const [ text, setText ] = useState(getRandomWords(2));
     const reloadButtonRef = useRef(null);
-    const { isEnded, input, chars, handleInput } = useTypeRacerAlgorithm(initialText.current);
-    const { seconds, time, start, stop } = useStopwatch();
+    const { isEnded, input, chars, handleInput, resetState } = useTypeRacerAlgorithm(text);
+    const { seconds, time, start, stop, reset } = useStopwatch();
     const { wpm, cpm } = useTypeRacerCounter({ seconds, time, chars });
     const [ placeholder, setPlaceholder ] = useState('Start typing here...');
 
@@ -29,9 +29,11 @@ function TypeRacer() {
         start();
     }
 
-    const handleClick = (e) => {
-        e.target.focus();
-        window.location.reload(false);
+    const handleReload = (e) => {
+        resetState();
+        reset();
+        setText(getRandomWords(2));
+        setPlaceholder('Start typing here...');
     }
 
     useEffect(() => {
@@ -57,7 +59,7 @@ function TypeRacer() {
                         })
                     }
                 </p>
-                { isEnded && <button className={classNames('rtr-button', { success: isEnded })} ref={reloadButtonRef} onClick={handleClick}>Try Again?</button> }
+                { isEnded && <button className={classNames('rtr-button', { success: isEnded })} ref={reloadButtonRef} onClick={handleReload}>Try Again?</button> }
             </div>
             <div className="rtr-input--container">
                 <input type="text" value={input} placeholder={placeholder} onInput={handleInput} onFocus={handleFocus}></input>

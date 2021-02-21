@@ -7,8 +7,10 @@ $danger-color: tomato;
 $danger-bg-color: mistyrose;
 $light-color: rgb(207, 207, 207);
 
-*::selection {
-  background-color: rgb(182, 225, 246);
+* {
+  &::selection {
+    background-color: rgb(182, 225, 246);
+  }
 }
 
 html, body, .root--container, .app--container {

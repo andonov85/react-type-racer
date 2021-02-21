@@ -16,6 +16,27 @@ function useTypeRacerAlgorithm(text) {
     const [ input, setInput ] = useState('');
     const [ isEnded, setIsEnded ] = useState(false);
 
+    const handleInput = (e) => {
+        if (isEnded) return;
+        const value = e.target.value;
+        const errIndex = findFirstDiffIndex(text, value, startIndex);
+
+        setErrorIndex(errIndex);
+        setCurrentIndex(startIndex + value.length - 1);
+
+        if (value[value.length - 1] === ' ' && errIndex === -1) {
+            setStartIndex(startIndex + value.length);
+            setInput('');
+        } else {
+            setInput(value);
+        }
+
+        if (startIndex + value.length >= text.length && errIndex === -1) {
+            setIsEnded(true);
+            setInput('');
+        }
+    }
+
     useEffect(() => {
         const charArr = text.split('').map((char, i) => {
             let className = 'rtr-text-default';
@@ -38,30 +59,17 @@ function useTypeRacerAlgorithm(text) {
             }
         })
         setChars(charArr);
-    }, [currentIndex, startIndex, errorIndex]);
+    }, [currentIndex, startIndex, errorIndex, text]);
 
-    const handleInput = (e) => {
-        if (isEnded) return;
-        const value = e.target.value;
-        const errIndex = findFirstDiffIndex(text, value, startIndex);
-
-        setErrorIndex(errIndex);
-        setCurrentIndex(startIndex + value.length - 1);
-
-        if (value[value.length - 1] === ' ' && errIndex === -1) {
-            setStartIndex(startIndex + value.length);
-            setInput('');
-        } else {
-            setInput(value);
-        }
-
-        if (startIndex + value.length >= text.length && errIndex === -1) {
-            setIsEnded(true);
-            setInput('');
-        }
+    const resetState = () => {
+        setIsEnded(false);
+        setChars([]);
+        setCurrentIndex(-1);
+        setErrorIndex(-1);
+        setStartIndex(0);
     }
 
-    return { isEnded, chars, input, handleInput, text }
+    return { isEnded, chars, input, handleInput, text, resetState }
 }
 
 export { useTypeRacerAlgorithm };

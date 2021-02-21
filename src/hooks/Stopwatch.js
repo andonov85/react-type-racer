@@ -42,11 +42,21 @@ function useStopwatch() {
         cancelAnimationFrame(id);
     }
 
+    const reset = () => {
+        setTime({
+            milliseconds: '000',
+            seconds: '00',
+            minutes: '0',
+            time: 0
+        });
+    }
+
     return {
         ...time,
         isRunning,
         start,
         stop,
+        reset
     }
 }
 
