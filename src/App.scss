@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code&display=swap');
+
+$success-color: #5B9A34;
+$default-color: black;
+$danger-color: tomato;
+$danger-bg-color: mistyrose;
+$light-color: rgb(207, 207, 207);
+
+*::selection {
+  background-color: rgb(182, 225, 246);
+}
+
+html, body, .root--container, .app--container {
+  height: 100%;
+}
+
+.app--container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rtr--container {
+  max-width: 739px;
+}
+
+.rtr--container, input {
+  font-family: 'Fira Code', monospace;
+}
+
+.rtr-timer--container {
+  font-size: 6.5rem;
+  text-align: center;
+}
+
+.rtr-text--container {
+  font-size: 1rem;
+  text-align: center;
+  margin-bottom: 12px;
+  padding: 23px 17px;
+  background: #F5F5F5;
+  border: 1px solid #DDDDDD;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+
+.rtr-input--container {
+  margin-bottom: 24px;
+
+  input {
+    text-align: center;
+    width: 100%;
+    font-size: 1.1rem;
+    border-radius: 4px;
+    border: 2px solid $light-color;
+    height: 40px;
+
+    &::placeholder {
+      color: grey;
+    }
+  }
+}
+
+.rtr-result--container {
+  text-align: center;
+  font-size: 1.2rem;
+
+  span:first-of-type {
+    margin-right: 30px;
+  }
+}
+
+.rtr-text-deafult {
+  color: $default-color; 
+}
+
+.rtr-text-light {
+  color: $light-color;
+}
+
+.rtr-text-danger {
+  color: $danger-color;
+  background-color: $danger-bg-color;
+}
