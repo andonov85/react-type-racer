@@ -16,7 +16,7 @@ function getRandomWords(count) {
 }
 
 function TypeRacer() {
-    const initialText = useRef(getRandomWords(2));
+    const initialText = useRef(getRandomWords(100));
     const reloadButtonRef = useRef(null);
     const { isEnded, input, chars, handleInput } = useTypeRacerAlgorithm(initialText.current);
     const { seconds, time, start, stop } = useStopwatch();
@@ -44,7 +44,7 @@ function TypeRacer() {
     return (
         <div className="rtr--container">
             <div className="rtr-timer--container">
-                <span>{ moment.duration(time).format('m:ss:SSS', {trim: false}) }</span>
+                <span className={classNames({ success: isEnded })}>{ moment.duration(time).format('m:ss:SSS', {trim: false}) }</span>
             </div>
             <div className="rtr-text--container">
                 <p>
@@ -57,14 +57,14 @@ function TypeRacer() {
                         })
                     }
                 </p>
-                { isEnded && <button ref={reloadButtonRef} onClick={handleClick}>Try Again?</button> }
+                { isEnded && <button className={classNames('rtr-button', { success: isEnded })} ref={reloadButtonRef} onClick={handleClick}>Try Again?</button> }
             </div>
             <div className="rtr-input--container">
                 <input type="text" value={input} placeholder={placeholder} onInput={handleInput} onFocus={handleFocus}></input>
             </div>
-            <div className="rtr-result--container">
-                <span>WPM:{wpm || 0}</span>
-                <span>CPM:{cpm || 0}</span>
+            <div className={classNames('rtr-result--container', { 'text-bold': isEnded })}>
+                <span>WPM: {wpm || 0}</span>
+                <span>CPM: {cpm || 0}</span>
             </div>
         </div>
     );

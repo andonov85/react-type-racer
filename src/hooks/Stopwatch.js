@@ -18,7 +18,6 @@ function useStopwatch() {
     const animate = () => {
         const now = moment();
         const diff = moment(now.diff(startTime.current));
-        // moment.duration(diff).format('mm:ss:S', {trim: false});
         const milliseconds = diff.millisecond();
         const seconds = diff.seconds();
         const minutes = diff.minutes();
