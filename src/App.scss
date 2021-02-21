@@ -8,6 +8,8 @@ $danger-bg-color: mistyrose;
 $light-color: rgb(207, 207, 207);
 
 * {
+  box-sizing: border-box;
+  
   &::selection {
     background-color: rgb(182, 225, 246);
   }
