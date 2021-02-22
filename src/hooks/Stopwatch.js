@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import moment from 'moment';
 import momentDurationFormatSetup from 'moment-duration-format';
  
@@ -22,6 +22,7 @@ function useStopwatch() {
         const seconds = diff.seconds();
         const minutes = diff.minutes();
         setTime({
+            tick: seconds,
             milliseconds: milliseconds,
             seconds: seconds,
             minutes: minutes,

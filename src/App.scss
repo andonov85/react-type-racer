@@ -19,24 +19,48 @@ html, body, .root--container, .app--container {
   height: 100%;
 }
 
+button {
+  cursor: pointer;
+  font-family: 'Roboto', sans-serif;
+  border: none;
+}
+
 .app--container {
+  // display: flex;
+  // justify-content: center;
+  // align-items: center;
+}
+
+.welcome-title {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 33px;
+}
+
+// Header
+.rtr-navbar--container {
+  display: flex;
+  justify-content: space-between;
+  height: 50px;
+  padding: 33px 42px;
+}
+
+.rtr--container {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.rtr--container {
-  max-width: 739px;
+.rtr--container-inner {
+  max-width: 100%;
+  width: 739px;
+  margin-top: 100px;
 }
 
 .rtr--container, input {
   font-family: 'Fira Code', monospace;
-}
-
-button {
-  cursor: pointer;
-  font-family: 'Roboto', sans-serif;
-  border: none;
 }
 
 .rtr-timer--container {
@@ -76,8 +100,8 @@ button {
     text-align: center;
     width: 100%;
     font-size: 1rem;
-    border-radius: 4px;
-    border: 2px solid $light-color;
+    border-radius: 5px;
+    border: 1px solid $light-color;
     height: 40px;
 
     &::placeholder {
@@ -94,6 +118,32 @@ button {
   span:first-of-type {
     margin-right: 30px;
   }
+}
+
+.rtr-leaderboard--container {
+  font-family: 'Roboto', sans-serif;
+
+  ul {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 22px;
+    margin-bottom: 13px;
+    border-radius: 5px;
+    border: 1px solid $light-color;
+    height: 40px;
+    font-weight: 700;
+  }
+}
+
+// Footer
+.rtr-footer--container {
+  text-align: center;
 }
 
 .rtr-button {
@@ -122,4 +172,10 @@ button {
 
 .text-bold {
   font-weight: bold;
+}
+
+@media screen and (max-width: 576px) {
+  .rtr-timer--container {
+    font-size: 18vw;
+  }
 }

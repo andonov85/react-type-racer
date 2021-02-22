@@ -4,6 +4,7 @@ import { useStopwatch } from '../hooks/Stopwatch';
 import { useTypeRacerAlgorithm } from '../hooks/TypeRacerAlgorithm';
 import { useTypeRacerCounter } from '../hooks/TypeRacerCounter';
 
+import ls from 'local-storage';
 import classNames from 'classnames';
 import randomWords from 'random-words';
 import moment from 'moment';
@@ -15,12 +16,23 @@ function getRandomWords(count) {
     return randomWords(count).join(' ');
 }
 
-function TypeRacer() {
-    const [ text, setText ] = useState(getRandomWords(2));
+function saveResultToLocalStorage(result) {
+    const rtrResults = ls.get('rtr-results');
+    if (rtrResults) {
+        rtrResults.push(result);
+        ls.set('rtr-results', rtrResults);
+    } else {
+        ls.set('rtr-results', [result]);
+    }
+    return ls.get('rtr-results');
+}
+
+function TypeRacer({ randomWordsCount }) {
+    const [ text, setText ] = useState(getRandomWords(randomWordsCount));
     const reloadButtonRef = useRef(null);
     const { isEnded, input, chars, handleInput, resetState } = useTypeRacerAlgorithm(text);
-    const { seconds, time, start, stop, reset } = useStopwatch();
-    const { wpm, cpm } = useTypeRacerCounter({ seconds, time, chars });
+    const { tick, time, start, stop, reset } = useStopwatch();
+    const { wpm, cpm } = useTypeRacerCounter(tick, { time, chars });
     const [ placeholder, setPlaceholder ] = useState('Start typing here...');
 
     const handleFocus = (e) => {
@@ -32,19 +44,24 @@ function TypeRacer() {
     const handleReload = (e) => {
         resetState();
         reset();
-        setText(getRandomWords(2));
+        setText(getRandomWords(randomWordsCount));
         setPlaceholder('Start typing here...');
     }
 
     useEffect(() => {
         stop();
         if (reloadButtonRef.current) {
-            reloadButtonRef.current.focus();
+            setPlaceholder('Done!');
+            saveResultToLocalStorage({
+                wpm: wpm,
+                cpm: cpm,
+                date: (new Date()).toISOString()
+            });
         }
     }, [isEnded])
 
     return (
-        <div className="rtr--container">
+        <>
             <div className="rtr-timer--container">
                 <span className={classNames({ success: isEnded })}>{ moment.duration(time).format('m:ss:SSS', {trim: false}) }</span>
             </div>
@@ -68,7 +85,7 @@ function TypeRacer() {
                 <span>WPM: {wpm || 0}</span>
                 <span>CPM: {cpm || 0}</span>
             </div>
-        </div>
+        </>
     );
 }
 
