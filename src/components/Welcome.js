@@ -2,6 +2,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { useGoogleLogin } from 'react-google-login';
 
 import { useAuth } from './Auth';
+import googleLogo from '../assets/images/google-logo.png';
 
 function Welcome() {
     let history = useHistory();
@@ -19,7 +20,7 @@ function Welcome() {
         },
         clientId: "815652919811-04teroae4aok8u52359jdr99fg4hdbk1.apps.googleusercontent.com",
         cookiePolicy: 'single_host_origin',
-        isSignedIn: false,
+        isSignedIn: true,
         onFailure: () => console.log(`Failure: Can't retrieve googleUser!`),
         uxMode: 'popup',
     });
@@ -29,7 +30,7 @@ function Welcome() {
             <h1 className="welcome-title">
                 Welcome to Type Racer
             </h1>
-            <button onClick={signIn}>Log in</button>
+            <button className="rtr-button google-button" onClick={signIn}><img src={googleLogo}></img><span>Login with Google</span></button>
         </article>
     );
 }

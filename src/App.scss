@@ -9,13 +9,16 @@ $light-color: rgb(207, 207, 207);
 
 * {
   box-sizing: border-box;
-  
+
   &::selection {
     background-color: rgb(182, 225, 246);
   }
 }
 
-html, body, .root--container, .app--container {
+html,
+body,
+.root--container,
+.app--container {
   height: 100%;
 }
 
@@ -23,6 +26,10 @@ button {
   cursor: pointer;
   font-family: 'Roboto', sans-serif;
   border: none;
+}
+
+a {
+  cursor: pointer;
 }
 
 .app--container {
@@ -59,7 +66,8 @@ button {
   margin-top: 100px;
 }
 
-.rtr--container, input {
+.rtr--container,
+input {
   font-family: 'Fira Code', monospace;
 }
 
@@ -147,6 +155,7 @@ button {
 }
 
 .rtr-button {
+  font-family: 'Roboto', sans-serif;
   color: white;
   padding: 15px 32px;
   font-weight: 500;
@@ -157,8 +166,37 @@ button {
   }
 }
 
+.google-button {
+  color: black;
+  background-color: white;
+  border: 1px solid #DDDDDD;
+  border-radius: 3px;
+  padding: 10px 20px;
+
+  img {
+    width: 25px;
+    margin-right: 7px;
+  }
+
+  span {
+    vertical-align: super;
+  }
+}
+
+.google-logout {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+  color: #FF0000;
+
+  text-align: center;
+  text-decoration-line: underline;
+}
+
 .rtr-text-default {
-  color: $default-color; 
+  color: $default-color;
 }
 
 .rtr-text-light {
@@ -168,6 +206,10 @@ button {
 .rtr-text-danger {
   color: $danger-color;
   background-color: $danger-bg-color;
+}
+
+.text-danger {
+  color: $danger-color;
 }
 
 .text-bold {

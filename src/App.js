@@ -32,7 +32,7 @@ function App() {
             <div className="rtr--container-inner">
               <Switch>
                 <PrivateRoute path="/type-racer">
-                  <TypeRacer randomWordsCount={10} />
+                  <TypeRacer randomWordsCount={20} />
                 </PrivateRoute>
                 <PrivateRoute path="/leaderboard">
                   <LeaderBoard />

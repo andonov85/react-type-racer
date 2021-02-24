@@ -7,13 +7,13 @@ function Footer({ children }) {
     let history = useHistory();
     let auth = useAuth();
 
-    const logout = () => {
+    const logOut = () => {
         auth.signout(() => history.push("/"));
     }
 
     return (
         <footer className="rtr-footer--container">
-            <button onClick={logout}>Log out</button>
+            <a className="google-logout" href="/" onClick={logOut}>Log out</a>
             {/* <GoogleLogout
                 className=""
                 clientId="815652919811-04teroae4aok8u52359jdr99fg4hdbk1.apps.googleusercontent.com"

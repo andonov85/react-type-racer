@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import moment from 'moment';
 import momentDurationFormatSetup from 'moment-duration-format';
  
