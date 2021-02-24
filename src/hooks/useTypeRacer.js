@@ -7,7 +7,7 @@ function findFirstDiffIndex(a, b, startIndex) {
     return -1;
 }
 
-function useTypeRacerAlgorithm(text) {
+function useTypeRacer(text) {
     const [currentIndex, setCurrentIndex] = useState(-1);
     const [errorIndex, setErrorIndex] = useState(-1);
     const [startIndex, setStartIndex] = useState(0);
@@ -72,4 +72,4 @@ function useTypeRacerAlgorithm(text) {
     return { isEnded, chars, input, handleInput, text, resetState }
 }
 
-export { useTypeRacerAlgorithm };
+export { useTypeRacer };

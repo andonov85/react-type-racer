@@ -1,5 +1,3 @@
-import { useState, useEffect } from 'react';
-
 import moment from 'moment';
 import momentDurationFormatSetup from 'moment-duration-format';
 
@@ -23,19 +21,12 @@ function countWordsAndChars(chars) {
     }
 }
 
-function useTypeRacerCounter(tick, { time, chars }) {
-    const [ wpm, setWpm ] = useState(0);
-    const [ cpm, setCpm ] = useState(0);
-
-    useEffect(() => {
-        const count = countWordsAndChars(chars);
-        const wpm = calculateAveragePerMinute(count.words, moment.duration(time).asSeconds());
-        const cpm = calculateAveragePerMinute(count.chars, moment.duration(time).asSeconds());
-        setWpm(wpm);
-        setCpm(cpm);
-    }, [tick]);
+function countWordsAndCharacterPerMinute(time, chars) {
+    const count = countWordsAndChars(chars);
+    const wpm = calculateAveragePerMinute(count.words, moment.duration(time).asSeconds());
+    const cpm = calculateAveragePerMinute(count.chars, moment.duration(time).asSeconds());
 
     return { wpm, cpm }
 }
 
-export { useTypeRacerCounter }
+export { countWordsAndCharacterPerMinute };

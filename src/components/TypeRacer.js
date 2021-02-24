@@ -1,14 +1,14 @@
 import { useState, useEffect, useRef } from 'react';
 
-import { useStopwatch } from '../hooks/Stopwatch';
-import { useTypeRacerAlgorithm } from '../hooks/TypeRacerAlgorithm';
-import { useTypeRacerCounter } from '../hooks/TypeRacerCounter';
-
 import ls from 'local-storage';
 import classNames from 'classnames';
 import randomWords from 'random-words';
 import moment from 'moment';
 import momentDurationFormatSetup from 'moment-duration-format';
+
+import { useTypeRacer } from '../hooks/useTypeRacer';
+import { countWordsAndCharacterPerMinute } from '../helpers/wordsCounter';
+import Stopwatch from './Stopwatch';
 
 momentDurationFormatSetup(moment);
 
@@ -28,32 +28,37 @@ function saveResultToLocalStorage(result) {
 }
 
 function TypeRacer({ randomWordsCount }) {
+    const [ count, setCount ] = useState({ wpm: 0, cpm: 0 });
+    const [ startStopwatch, setStartStopwatch ] = useState(false);
+    const [ resetStopwatch, setResetStopwatch ] = useState(false);
     const [ text, setText ] = useState(getRandomWords(randomWordsCount));
     const reloadButtonRef = useRef(null);
-    const { isEnded, input, chars, handleInput, resetState } = useTypeRacerAlgorithm(text);
-    const { tick, time, start, stop, reset } = useStopwatch();
-    const { wpm, cpm } = useTypeRacerCounter(tick, { time, chars });
+    const { isEnded, input, chars, handleInput, resetState } = useTypeRacer(text);
     const [ placeholder, setPlaceholder ] = useState('Start typing here...');
 
     const handleFocus = (e) => {
         if (isEnded) return;
         setPlaceholder('');
-        start();
+        setStartStopwatch(true);
     }
 
     const handleReload = (e) => {
         resetState();
-        reset();
+        setResetStopwatch(true);
         setText(getRandomWords(randomWordsCount));
         setPlaceholder('Start typing here...');
     }
 
+    const onTick = (time) => {
+        setCount(countWordsAndCharacterPerMinute(time, chars));
+    }
+
     useEffect(() => {
-        stop();
         if (isEnded) {
+            setStartStopwatch(false);
             saveResultToLocalStorage({
-                wpm: wpm,
-                cpm: cpm,
+                wpm: count.wpm,
+                cpm: count.cpm,
                 date: (new Date()).toISOString()
             });
         }
@@ -64,9 +69,7 @@ function TypeRacer({ randomWordsCount }) {
 
     return (
         <>
-            <div className="rtr-timer--container">
-                <span className={classNames({ success: isEnded })}>{ moment.duration(time).format('m:ss:SSS', {trim: false}) }</span>
-            </div>
+            <Stopwatch startStopwatch={startStopwatch} stopStopwatch={isEnded} resetStopwatch={resetStopwatch} onTick={onTick}/>
             <div className="rtr-text--container">
                 <p>
                     {
@@ -84,8 +87,8 @@ function TypeRacer({ randomWordsCount }) {
                 <input type="text" value={input} placeholder={placeholder} onInput={handleInput} onFocus={handleFocus}></input>
             </div>
             <div className={classNames('rtr-result--container', { 'text-bold': isEnded })}>
-                <span>WPM: {wpm || 0}</span>
-                <span>CPM: {cpm || 0}</span>
+                <span>WPM: { count.wpm }</span>
+                <span>CPM: { count.cpm }</span>
             </div>
         </>
     );
