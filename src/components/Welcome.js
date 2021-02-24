@@ -15,6 +15,7 @@ function Welcome() {
                 setTimeout(() => {
                     history.replace(from);
                 }, 100);
+                // console.log(res.profileObj)
                 return res.profileObj;
             })
         },
@@ -22,7 +23,7 @@ function Welcome() {
         cookiePolicy: 'single_host_origin',
         isSignedIn: true,
         onFailure: () => console.log(`Failure: Can't retrieve googleUser!`),
-        uxMode: 'popup',
+        uxMode: 'redirect',
     });
 
     return (

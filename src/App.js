@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
-import { useAuth, ProvideAuth, PrivateRoute } from './components/Auth';
+import { ProvideAuth, PrivateRoute } from './components/Auth';
 import { NavBar, NavItem } from './components/NavBar';
 import Footer from './components/Footer';
 import TypeRacer from './components/TypeRacer';
@@ -10,9 +10,6 @@ import Welcome from './components/Welcome';
 import './App.scss';
 
 function App() {
-  const auth = useAuth();
-  console.log(auth)
-
   return (
     <div className="app--container">
       <ProvideAuth>
