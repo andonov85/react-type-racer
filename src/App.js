@@ -34,7 +34,7 @@ function App() {
                 <PrivateRoute path="/leaderboard">
                   <LeaderBoard />
                 </PrivateRoute>
-                <Route path="/">
+                <Route exact path="/">
                   <Welcome />
                 </Route>
               </Switch>

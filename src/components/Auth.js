@@ -36,7 +36,6 @@ function useAuth() {
 
 function PrivateRoute({ children,...rest }) {
     const auth = useAuth();
-    console.log('PrivateRoute', auth.user)
     return (
         <Route
             {...rest}

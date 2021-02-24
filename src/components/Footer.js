@@ -3,7 +3,7 @@ import { useGoogleLogout } from 'react-google-login'
 
 import { useAuth } from './Auth';
 
-function Footer({ children }) {
+function Footer() {
     let history = useHistory();
     let auth = useAuth();
     const { signOut } = useGoogleLogout({

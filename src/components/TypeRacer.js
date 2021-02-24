@@ -50,13 +50,15 @@ function TypeRacer({ randomWordsCount }) {
 
     useEffect(() => {
         stop();
-        if (reloadButtonRef.current) {
-            setPlaceholder('Done!');
+        if (isEnded) {
             saveResultToLocalStorage({
                 wpm: wpm,
                 cpm: cpm,
                 date: (new Date()).toISOString()
             });
+        }
+        if (reloadButtonRef.current) {
+            setPlaceholder('Done!');
         }
     }, [isEnded])
 

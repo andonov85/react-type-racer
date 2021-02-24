@@ -8,14 +8,11 @@ function Welcome() {
     let history = useHistory();
     let location = useLocation();
     let auth = useAuth();
-    const { from } = location.state || { from: { pathname: "/" } };
+    const { from } = location.state || { from: { pathname: "/type-racer" } };
     const { signIn } = useGoogleLogin({
         onSuccess: (res) => {
             return auth.signin(() => {
-                setTimeout(() => {
-                    history.replace(from);
-                }, 100);
-                // console.log(res.profileObj)
+                history.replace(from);
                 return res.profileObj;
             })
         },
