@@ -30,12 +30,13 @@ button {
 
 a {
   cursor: pointer;
+  font-family: 'Roboto', sans-serif;
+  color: black;
 }
 
 .app--container {
-  // display: flex;
-  // justify-content: center;
-  // align-items: center;
+  display: flex;
+  flex-direction: column;
 }
 
 .welcome-title {
@@ -44,6 +45,11 @@ a {
   font-weight: 700;
   font-size: 2.1rem;
   line-height: 33px;
+}
+
+.rtr-brand {
+  font-weight: 700;
+  text-decoration: none;
 }
 
 // Header
@@ -58,12 +64,12 @@ a {
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100%
 }
 
 .rtr--container-inner {
   max-width: 100%;
   width: 739px;
-  margin-top: 100px;
 }
 
 .rtr--container,
@@ -139,18 +145,32 @@ input {
   li {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding: 16px 22px;
     margin-bottom: 13px;
     border-radius: 5px;
     border: 1px solid $light-color;
     height: 40px;
     font-weight: 700;
+
+    span:nth-child(1) {
+      width: 15%;
+    }
+
+    span:nth-child(2) {
+      width: 15%;
+    }
+
+    span:nth-child(3) {
+      width: 70%;
+      text-align: right;
+      font-weight: normal;
+    }
   }
 }
 
 // Footer
 .rtr-footer--container {
+  height: 50px;
   text-align: center;
 }
 

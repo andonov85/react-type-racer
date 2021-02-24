@@ -7,6 +7,7 @@ function LeaderBoard () {
 
     return (
         <div className="rtr-leaderboard--container">
+            <p>Your games:</p>
             <ul>
                 {
                     results.sort((a, b) => new Date(b.date) - new Date(a.date)).map( ({ wpm, cpm, date }) => {

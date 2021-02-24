@@ -14,16 +14,14 @@ function App() {
     <div className="app--container">
       <ProvideAuth>
         <Router>
-          { true &&
-            <NavBar>
-              <NavItem>
-                <Link to="/type-racer">Type Racer</Link>
-              </NavItem>
-              <NavItem>
-                <Link to="/leaderboard">Previous Games</Link>
-              </NavItem>
-            </NavBar>
-          }
+          <NavBar>
+            <NavItem>
+              <Link className="rtr-brand" to="/type-racer">Type Racer</Link>
+            </NavItem>
+            <NavItem>
+              <Link to="/leaderboard">Previous Games</Link>
+            </NavItem>
+          </NavBar>
 
           <div className="rtr--container">
             <div className="rtr--container-inner">

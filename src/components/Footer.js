@@ -17,9 +17,15 @@ function Footer() {
       })
 
     return (
-        <footer className="rtr-footer--container">
-            <a className="google-logout" onClick={signOut}>Log out</a>
-        </footer>
+        <>
+            { auth.user ?
+                <footer className="rtr-footer--container">
+                    <a className="google-logout" onClick={signOut}>Log out</a>
+                </footer>
+                :
+                null
+            }
+        </>
     );
 }
 

@@ -1,3 +1,5 @@
+import { useAuth } from './Auth';
+
 function NavItem ({ children }) {
     return (
         <div className="rtr-navbar--item">
@@ -7,10 +9,17 @@ function NavItem ({ children }) {
 }
 
 function NavBar ({ children }) {
+    let auth = useAuth();
     return (
-        <header className="rtr-navbar--container">
-            { children }
-        </header>
+        <>
+            { auth.user ?
+                <header className="rtr-navbar--container">
+                    { children }
+                </header>
+                :
+                null
+            }
+        </>
     );
 }
 
