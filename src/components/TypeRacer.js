@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react';
 
 import ls from 'local-storage';
 import classNames from 'classnames';
-import randomWords from 'random-words';
 import moment from 'moment';
 import momentDurationFormatSetup from 'moment-duration-format';
 
@@ -11,10 +10,6 @@ import { countWordsAndCharacterPerMinute } from '../helpers/wordsCounter';
 import Stopwatch from './Stopwatch';
 
 momentDurationFormatSetup(moment);
-
-function getRandomWords(count) {
-    return randomWords(count).join(' ');
-}
 
 function saveResultToLocalStorage(result) {
     const rtrResults = ls.get('rtr-results');
@@ -27,13 +22,12 @@ function saveResultToLocalStorage(result) {
     return ls.get('rtr-results');
 }
 
-function TypeRacer({ randomWordsCount }) {
+function TypeRacer({ wordsCount }) {
+    const reloadButtonRef = useRef(null);
     const [ count, setCount ] = useState({ wpm: 0, cpm: 0 });
     const [ startStopwatch, setStartStopwatch ] = useState(false);
     const [ resetStopwatch, setResetStopwatch ] = useState(false);
-    const [ text, setText ] = useState(getRandomWords(randomWordsCount));
-    const reloadButtonRef = useRef(null);
-    const { isEnded, input, chars, handleInput, resetState } = useTypeRacer(text);
+    const { isEnded, input, chars, handleInput, viewText, resetTypeRacer } = useTypeRacer({ wordsCount: wordsCount });
     const [ placeholder, setPlaceholder ] = useState('Start typing here...');
 
     const handleFocus = (e) => {
@@ -43,9 +37,9 @@ function TypeRacer({ randomWordsCount }) {
     }
 
     const handleReload = (e) => {
-        resetState();
+        resetTypeRacer();
+        setCount({ wpm: 0, cpm: 0 });
         setResetStopwatch(true);
-        setText(getRandomWords(randomWordsCount));
         setPlaceholder('Start typing here...');
     }
 
@@ -65,7 +59,7 @@ function TypeRacer({ randomWordsCount }) {
         if (reloadButtonRef.current) {
             setPlaceholder('Done!');
         }
-    }, [isEnded])
+    }, [isEnded]);
 
     return (
         <>
@@ -73,10 +67,10 @@ function TypeRacer({ randomWordsCount }) {
             <div className="rtr-text--container">
                 <p>
                     {
-                        chars.map((char, index) => {
-                            const { value, className } = char;
+                        viewText.map((text, index) => {
+                            const { value, className } = text;
                             return (
-                                <span className={classNames(className)} key={value + index}>{value}</span>
+                                <span className={classNames(className)} key={className + index}>{ value }</span>
                             )
                         })
                     }

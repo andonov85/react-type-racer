@@ -36,11 +36,9 @@ function Stopwatch ({ startStopwatch, stopStopwatch, resetStopwatch, onTick }) {
     }, [tick])
 
     return (
-        <>
-            <div className="rtr-timer--container">
-                <span className={classNames({ success: stopStopwatch })}>{ moment.duration(time).format('m:ss:SSS', {trim: false}) }</span>
-            </div>
-        </>
+        <div className="rtr-timer--container">
+            <span className={classNames({ success: stopStopwatch })}>{ moment.duration(time).format('m:ss:SSS', {trim: false}) }</span>
+        </div>
     )
 }
 
