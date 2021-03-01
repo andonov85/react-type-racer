@@ -1,6 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import randomWords from 'random-words';
 
+function getLast(arr) {
+    return arr[arr.length - 1];
+}
+
 function getRandomWords(count) {
     return randomWords(count).join(' ');
 }
@@ -68,15 +72,13 @@ function useTypeRacer({ wordsCount }) {
     const handleInput = (e) => {
         if (isEnded) return;
         const value = e.target.value;
-        const errIndex = findFirstDiffIndex(text.current, value, startIndex.current);
-
-        errorIndex.current = errIndex;
+        errorIndex.current = findFirstDiffIndex(text.current, value, startIndex.current);
         currentIndex.current = startIndex.current + value.length - 1;
 
-        if (value[value.length - 1] === ' ' && errIndex === -1) {
-            startIndex.current = startIndex.current + value.length;
+        if (getLast(value) === ' ' && errorIndex.current === -1) {
+            startIndex.current += value.length;
             setInput('');
-        } else if (startIndex.current + value.length >= text.current.length && errIndex === -1) {
+        } else if (currentIndex.current >= text.current.length - 1 && errorIndex.current === -1) {
             setIsEnded(true);
             setInput('');
         } else {
@@ -99,7 +101,7 @@ function useTypeRacer({ wordsCount }) {
         setChars(makeCheckedCharsArray(splitedText.current, currentIndex.current, errorIndex.current));
         setIsEnded(false);
     }
-console.log('useTypeRacer')
+
     const resetTypeRacer = () => {
         initTypeRacer();
     }
