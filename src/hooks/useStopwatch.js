@@ -1,11 +1,11 @@
-import { useState, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import moment from 'moment';
 import momentDurationFormatSetup from 'moment-duration-format';
  
 momentDurationFormatSetup(moment);
 
 function useStopwatch() {
-    const [ id, setId ] = useState();
+    const id = useRef();
     const startTime = useRef();
     const [ time, setTime ] = useState({
         milliseconds: '000',
@@ -28,19 +28,19 @@ function useStopwatch() {
             minutes: minutes,
             time: diff
         });
-        setId(requestAnimationFrame(animate));
+        id.current = requestAnimationFrame(animate);
     }
 
     const start = () => {
         if (isRunning) return;
         startTime.current = moment();
         setIsRunning(true);
-        setId(requestAnimationFrame(animate));
+        id.current = requestAnimationFrame(animate);
     }
 
     const stop = () => {
         setIsRunning(false);
-        cancelAnimationFrame(id);
+        cancelAnimationFrame(id.current);
     }
 
     const reset = () => {
@@ -51,6 +51,12 @@ function useStopwatch() {
             time: 0
         });
     }
+
+    useEffect(() => {
+        return () => {
+            cancelAnimationFrame(id.current);
+        }
+    }, []);
 
     return {
         ...time,
