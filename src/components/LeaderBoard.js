@@ -15,7 +15,7 @@ function LeaderBoard () {
                             <li key={date}>
                                 <span>WPM: { wpm }</span>
                                 <span>CPM: { cpm }</span>
-                                <span>{ moment(date).format('Do MMMM YYYY; mm:ss:SS') }</span>
+                                <span>{ moment(date).format('Do MMMM YYYY; H:mm:ss') }</span>
                             </li>
                         );
                     })
