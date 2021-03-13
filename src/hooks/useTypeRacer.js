@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import randomWords from 'random-words';
 
-function getLast(arr) {
+function getLastElement(arr) {
     return arr[arr.length - 1];
 }
 
@@ -25,6 +25,7 @@ function makeCheckedCharsArray(charsArr, currentIndex, errorIndex) {
         return {
             value: char,
             isCorrect: isCorrect,
+            isCurrent: currentIndex === i
         }
     });
 }
@@ -67,26 +68,27 @@ function useTypeRacer({ wordsCount }) {
     const [ chars, setChars ] = useState([]);
     const [ viewText, setViewText ] = useState([]);
     const [ input, setInput ] = useState('');
-    const [ isEnded, setIsEnded ] = useState(false);
 
     const handleInput = (e) => {
-        if (isEnded) return;
+        if (getLastElement(chars).isCorrect) return;
+
         const value = e.target.value;
         errorIndex.current = findFirstDiffIndex(text.current, value, startIndex.current);
         currentIndex.current = startIndex.current + value.length - 1;
+        const charsArr = makeCheckedCharsArray(splitedText.current, currentIndex.current, errorIndex.current);
+        const viewTextArr = makeViewTextArray(text.current, currentIndex.current, errorIndex.current);
 
-        if (getLast(value) === ' ' && errorIndex.current === -1) {
+        if (getLastElement(value) === ' ' && errorIndex.current === -1) {
             startIndex.current += value.length;
             setInput('');
-        } else if (currentIndex.current >= text.current.length - 1 && errorIndex.current === -1) {
-            setIsEnded(true);
+        } else if (getLastElement(charsArr).isCorrect) {
             setInput('');
         } else {
             setInput(value);
         }
 
-        setChars(makeCheckedCharsArray(splitedText.current, currentIndex.current, errorIndex.current));
-        setViewText(makeViewTextArray(text.current, currentIndex.current, errorIndex.current));
+        setChars(charsArr);
+        setViewText(viewTextArr);
     }
 
     const initTypeRacer = () => {
@@ -99,7 +101,6 @@ function useTypeRacer({ wordsCount }) {
 
         setViewText(makeViewTextArray(text.current, currentIndex.current, errorIndex.current));
         setChars(makeCheckedCharsArray(splitedText.current, currentIndex.current, errorIndex.current));
-        setIsEnded(false);
     }
 
     const resetTypeRacer = () => {
@@ -110,7 +111,7 @@ function useTypeRacer({ wordsCount }) {
         initTypeRacer();
     }, [ wordsCount ]);
 
-    return { isEnded, chars, input, handleInput, viewText, resetTypeRacer }
+    return { input, handleInput, chars, viewText, resetTypeRacer }
 }
 
 export { useTypeRacer };

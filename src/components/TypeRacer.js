@@ -1,69 +1,58 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
-import ls from 'local-storage';
 import classNames from 'classnames';
 import moment from 'moment';
 import momentDurationFormatSetup from 'moment-duration-format';
 
 import { useTypeRacer } from '../hooks/useTypeRacer';
-import { countWordsAndCharacterPerMinute } from '../helpers/wordsCounter';
 import Stopwatch from './Stopwatch';
+import WordsCounter from './WordsCounter';
 
 momentDurationFormatSetup(moment);
 
-function saveResultToLocalStorage(result) {
-    const rtrResults = ls.get('rtr-results');
-    if (rtrResults) {
-        rtrResults.push(result);
-        ls.set('rtr-results', rtrResults);
-    } else {
-        ls.set('rtr-results', [result]);
-    }
-    return ls.get('rtr-results');
+function getLastElement(arr) {
+    return arr[arr.length - 1];
+}
+
+function isTyperEnded(charsArr) {
+    return getLastElement(charsArr) && getLastElement(charsArr).isCorrect;
 }
 
 function TypeRacer({ wordsCount }) {
-    const reloadButtonRef = useRef(null);
-    const [ count, setCount ] = useState({ wpm: 0, cpm: 0 });
-    const [ startStopwatch, setStartStopwatch ] = useState(false);
-    const [ resetStopwatch, setResetStopwatch ] = useState(false);
-    const { isEnded, input, chars, handleInput, viewText, resetTypeRacer } = useTypeRacer({ wordsCount: wordsCount });
+    const [ start, setStart ] = useState();
+    const [ reset, setReset ] = useState(false);
+    const [ time, setTime ] = useState();
     const [ placeholder, setPlaceholder ] = useState('Start typing here...');
 
+    const { input, handleInput, chars, viewText, resetTypeRacer } = useTypeRacer({ wordsCount: wordsCount });
+
     const handleFocus = (e) => {
-        if (isEnded) return;
+        if (isTyperEnded(chars)) return;
+        setStart(true);
+        setReset(false);
         setPlaceholder('');
-        setStartStopwatch(true);
     }
 
-    const handleReload = (e) => {
+    const handleReset = (e) => {
+        setReset(true);
         resetTypeRacer();
-        setCount({ wpm: 0, cpm: 0 });
-        setResetStopwatch(true);
         setPlaceholder('Start typing here...');
     }
 
     const onTick = (time) => {
-        setCount(countWordsAndCharacterPerMinute(time, chars));
+        setTime(time);
     }
 
     useEffect(() => {
-        if (isEnded) {
-            setStartStopwatch(false);
-            saveResultToLocalStorage({
-                wpm: count.wpm,
-                cpm: count.cpm,
-                date: (new Date()).toISOString()
-            });
-        }
-        if (reloadButtonRef.current) {
+        if (isTyperEnded(chars)) {
+            setStart(false);
             setPlaceholder('Done!');
         }
-    }, [isEnded]);
+    }, [chars]);
 
     return (
         <>
-            <Stopwatch startStopwatch={startStopwatch} stopStopwatch={isEnded} resetStopwatch={resetStopwatch} onTick={onTick}/>
+            <Stopwatch toggleStart={start} resetStopwatch={reset} onTick={onTick} />
             <div className="rtr-text--container">
                 <p>
                     {
@@ -75,15 +64,12 @@ function TypeRacer({ wordsCount }) {
                         })
                     }
                 </p>
-                { isEnded && <button className={classNames('rtr-button', { success: isEnded })} ref={reloadButtonRef} onClick={handleReload}>Try Again?</button> }
+                { isTyperEnded(chars) && <button className={classNames('rtr-button', { success: isTyperEnded(chars) })} onClick={handleReset}>Try Again?</button> }
             </div>
             <div className="rtr-input--container">
                 <input type="text" value={input} placeholder={placeholder} onInput={handleInput} onFocus={handleFocus}></input>
             </div>
-            <div className={classNames('rtr-result--container', { 'text-bold': isEnded })}>
-                <span>WPM: { count.wpm }</span>
-                <span>CPM: { count.cpm }</span>
-            </div>
+            <WordsCounter time={time} chars={chars} resetState={reset} toggleStart={start} />
         </>
     );
 }

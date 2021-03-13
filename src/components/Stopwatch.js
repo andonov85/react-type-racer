@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import classNames from 'classnames';
 
 import { useStopwatch } from '../hooks/useStopwatch';
@@ -8,24 +8,23 @@ import momentDurationFormatSetup from 'moment-duration-format';
 
 momentDurationFormatSetup(moment);
 
-function Stopwatch ({ startStopwatch, stopStopwatch, resetStopwatch, onTick }) {
+function Stopwatch ({ toggleStart, resetStopwatch, onTick }) {
     const { tick, time, start, stop, reset } = useStopwatch();
+    const [ success, setSuccess ] = useState(false);
 
     useEffect(() => {
-        if (startStopwatch) {
+        if (toggleStart) {
             start();
-        }
-    }, [startStopwatch]);
-
-    useEffect(() => {
-        if (stopStopwatch) {
+        } else if (toggleStart === false) {
             stop();
+            setSuccess(true);
         }
-    }, [stopStopwatch]);
+    }, [toggleStart]);
 
     useEffect(() => {
         if (resetStopwatch) {
             reset();
+            setSuccess(false);
         }
     }, [resetStopwatch]);
 
@@ -37,7 +36,7 @@ function Stopwatch ({ startStopwatch, stopStopwatch, resetStopwatch, onTick }) {
 
     return (
         <div className="rtr-timer--container">
-            <span className={classNames({ success: stopStopwatch })}>{ moment.duration(time).format('m:ss:SSS', {trim: false}) }</span>
+            <span className={classNames({ success: success })}>{ moment.duration(time).format('m:ss:SSS', {trim: false}) }</span>
         </div>
     )
 }
