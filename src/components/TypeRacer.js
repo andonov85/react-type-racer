@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 import classNames from 'classnames';
 import moment from 'moment';
@@ -16,6 +16,18 @@ function getLastElement(arr) {
 
 function isTyperEnded(charsArr) {
     return getLastElement(charsArr) && getLastElement(charsArr).isCorrect;
+}
+
+function Text({ viewText }) {
+    const text = useMemo(() => {
+        return viewText.map(({ value, className }, index) => {
+            return (
+                <span className={classNames(className)} key={className + index}>{ value }</span>
+            );
+        })
+    }, [viewText]);
+
+    return text;
 }
 
 function TypeRacer({ wordsCount }) {
@@ -55,14 +67,7 @@ function TypeRacer({ wordsCount }) {
             <Stopwatch toggleStart={start} resetStopwatch={reset} onTick={onTick} />
             <div className="rtr-text--container">
                 <p>
-                    {
-                        viewText.map((text, index) => {
-                            const { value, className } = text;
-                            return (
-                                <span className={classNames(className)} key={className + index}>{ value }</span>
-                            )
-                        })
-                    }
+                    <Text viewText={viewText} />
                 </p>
                 { isTyperEnded(chars) && <button className={classNames('rtr-button', { success: isTyperEnded(chars) })} onClick={handleReset}>Try Again?</button> }
             </div>
