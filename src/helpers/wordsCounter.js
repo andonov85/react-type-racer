@@ -25,7 +25,6 @@ function countWordsAndCharacterPerMinute(time, chars) {
     const count = countWordsAndChars(chars);
     const wpm = calculateAveragePerMinute(count.words, moment.duration(time).asSeconds());
     const cpm = calculateAveragePerMinute(count.chars, moment.duration(time).asSeconds());
-
     return { wpm, cpm }
 }
 
