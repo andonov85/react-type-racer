@@ -37,7 +37,8 @@ function WordsCounter({ time, chars, resetState, toggleStart }) {
             saveResultToLocalStorage({
                 wpm: count.wpm,
                 cpm: count.cpm,
-                date: (new Date()).toISOString()
+                date: (new Date()).toISOString(),
+                text: chars.map(char => char.value).join(''),
             });
             setTextBold(true);
         }

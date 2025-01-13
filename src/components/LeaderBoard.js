@@ -10,12 +10,13 @@ function LeaderBoard () {
             <p>Your games:</p>
             <ul>
                 {
-                    results.sort((a, b) => new Date(b.date) - new Date(a.date)).map( ({ wpm, cpm, date }) => {
+                    results.sort((a, b) => new Date(b.date) - new Date(a.date)).map( ({ wpm, cpm, date, text }) => {
                         return (
                             <li key={date}>
                                 <span>WPM: { wpm }</span>
                                 <span>CPM: { cpm }</span>
                                 <span>{ moment(date).format('Do MMMM YYYY; H:mm:ss') }</span>
+                                <div>Text: {text}</div>
                             </li>
                         );
                     })

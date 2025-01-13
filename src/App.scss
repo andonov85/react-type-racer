@@ -144,12 +144,13 @@ input {
 
   li {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     padding: 16px 22px;
     margin-bottom: 13px;
     border-radius: 5px;
     border: 1px solid $light-color;
-    height: 40px;
+    // height: 40px;
     font-weight: 700;
 
     span:nth-child(1) {
@@ -215,6 +216,7 @@ input {
   text-decoration-line: underline;
 }
 
+// Utils
 .rtr-text-default {
   color: $default-color;
 }

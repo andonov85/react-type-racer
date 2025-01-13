@@ -9,7 +9,7 @@ import momentDurationFormatSetup from 'moment-duration-format';
 momentDurationFormatSetup(moment);
 
 function Stopwatch ({ toggleStart, resetStopwatch, onTick }) {
-    const { tick, time, start, stop, reset } = useStopwatch();
+    const { time, start, stop, reset } = useStopwatch(onTick);
     const [ success, setSuccess ] = useState(false);
 
     useEffect(() => {
@@ -19,7 +19,7 @@ function Stopwatch ({ toggleStart, resetStopwatch, onTick }) {
             stop();
             setSuccess(true);
         }
-    }, [toggleStart]);
+    }, [toggleStart, stop]);
 
     useEffect(() => {
         if (resetStopwatch) {
@@ -27,12 +27,6 @@ function Stopwatch ({ toggleStart, resetStopwatch, onTick }) {
             setSuccess(false);
         }
     }, [resetStopwatch]);
-
-    useEffect(() => {
-        if (tick !== undefined) {
-            onTick(time);
-        }
-    }, [tick])
 
     return (
         <div className="rtr-timer--container">

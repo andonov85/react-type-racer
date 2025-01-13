@@ -1,10 +1,10 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import moment from 'moment';
 import momentDurationFormatSetup from 'moment-duration-format';
  
 momentDurationFormatSetup(moment);
 
-function useStopwatch() {
+function useStopwatch(onTickCallback) {
     const id = useRef();
     const startTime = useRef();
     const [ time, setTime ] = useState({
@@ -13,44 +13,6 @@ function useStopwatch() {
         minutes: '0',
         time: 0
     });
-    const [ isRunning, setIsRunning ] = useState(0);
-
-    const animate = () => {
-        const now = moment();
-        const diff = moment(now.diff(startTime.current));
-        const milliseconds = diff.millisecond();
-        const seconds = diff.seconds();
-        const minutes = diff.minutes();
-        setTime({
-            tick: seconds,
-            milliseconds: milliseconds,
-            seconds: seconds,
-            minutes: minutes,
-            time: diff
-        });
-        id.current = requestAnimationFrame(animate);
-    }
-
-    const start = () => {
-        if (isRunning) return;
-        startTime.current = moment();
-        setIsRunning(true);
-        id.current = requestAnimationFrame(animate);
-    }
-
-    const stop = () => {
-        setIsRunning(false);
-        cancelAnimationFrame(id.current);
-    }
-
-    const reset = () => {
-        setTime({
-            milliseconds: '000',
-            seconds: '00',
-            minutes: '0',
-            time: 0
-        });
-    }
 
     useEffect(() => {
         return () => {
@@ -58,9 +20,45 @@ function useStopwatch() {
         }
     }, []);
 
+    const animate = useCallback((duration) => {
+        // console.log(duration);
+        const now = moment();
+        const diff = moment(now.diff(startTime.current));
+        const milliseconds = diff.millisecond();
+        const seconds = diff.seconds();
+        const minutes = diff.minutes();
+        const currentTime = {
+            milliseconds: milliseconds,
+            seconds: seconds,
+            minutes: minutes,
+            time: diff
+        };
+        setTime(currentTime);
+        if (time.seconds !== currentTime.seconds) onTickCallback(currentTime);
+        id.current = requestAnimationFrame(animate);
+    }, []);
+
+    const start = useCallback(() => {
+        startTime.current = moment();
+        id.current = requestAnimationFrame(animate);
+    }, []);
+
+    const stop = useCallback(() => {
+        console.log(id.current);
+        cancelAnimationFrame(id.current);
+    }, []);
+
+    const reset = useCallback(() => {
+        setTime({
+            milliseconds: '000',
+            seconds: '00',
+            minutes: '0',
+            time: 0
+        });
+    }, []);
+
     return {
         ...time,
-        isRunning,
         start,
         stop,
         reset
